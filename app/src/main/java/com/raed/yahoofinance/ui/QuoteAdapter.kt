@@ -28,13 +28,13 @@ class QuoteAdapter : ListAdapter<Quote, QuoteAdapter.QuoteViewHolder>(QuoteDiffC
         fun bind(quote: Quote) {
             itemQuoteBinding.ivItemQuoteTitle.text = quote.symbol
             itemQuoteBinding.ivItemQuoteEx.text = quote.exchange
-            itemQuoteBinding.ivItemQuoteShortname.text = quote.shortname
+            itemQuoteBinding.ivItemQuoteShortname.text = quote.shortName
         }
     }
 
     object QuoteDiffCallback : DiffUtil.ItemCallback<Quote>() {
         override fun areItemsTheSame(oldItem: Quote, newItem: Quote): Boolean {
-            return oldItem.score == newItem.score
+            return oldItem.fullExchangeName == newItem.fullExchangeName
         }
 
         override fun areContentsTheSame(oldItem: Quote, newItem: Quote): Boolean {

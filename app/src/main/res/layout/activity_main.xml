@@ -15,13 +15,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <com.google.android.material.search.SearchView
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/sv_activity_main_search"
-            android:layout_width="wrap_content"
-            android:layout_height="?attr/actionBarSize"
-            android:layout_centerHorizontal="true"
-            android:iconifiedByDefault="true"
-            android:queryHint="Search" />
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:drawableStart="@drawable/ic_search"
+            android:drawableTint="@color/white"
+            android:hint="@string/search"
+            android:textColor="?attr/colorOnPrimary" />
+
+
     </com.google.android.material.appbar.MaterialToolbar>
 
 
@@ -30,9 +34,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_4"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tb_activity_main_toolbar"
+        app:layout_constraintVertical_bias="0"
         tools:itemCount="10"
         tools:listitem="@layout/item_quote" />
 

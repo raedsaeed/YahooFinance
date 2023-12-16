@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -32,6 +33,19 @@ class MainActivity : AppCompatActivity() {
         binding.rvActivityMainList.adapter = quoteAdapter
 
 
+        binding.svActivityMainSearch.doOnTextChanged { text, _, _, _ ->
+            if (!text.isNullOrEmpty()) {
+                val newList = quotes?.filter {
+                    it.shortName.toString().contains(text.toString(), true) ||
+                            it.fullExchangeName.toString().contains(text.toString(), true) ||
+                            it.symbol.toString().contains(text.toString(), true)
+                }
+                quoteAdapter.submitList(newList)
+            } else {
+                quoteAdapter.submitList(quotes)
+            }
+        }
+
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect { uiState ->
@@ -46,10 +60,10 @@ class MainActivity : AppCompatActivity() {
         binding.pbActivityMainLoading.isVisible = uiState.isLoading
 
         if (uiState.error != null) {
-            Snackbar.make(binding.root, uiState.error, Snackbar.LENGTH_SHORT).show()
+            Snackbar.make(binding.root, uiState.error, Snackbar.LENGTH_LONG).show()
         }
 
-        quotes = uiState.dataSet
+        this.quotes = uiState.dataSet
         quoteAdapter.submitList(quotes)
     }
 }
