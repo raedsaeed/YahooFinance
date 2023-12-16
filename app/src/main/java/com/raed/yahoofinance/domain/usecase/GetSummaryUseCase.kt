@@ -1,8 +1,7 @@
 package com.raed.yahoofinance.domain.usecase
 
-import com.raed.yahoofinance.data.model.NetworkViewState
+import com.raed.yahoofinance.data.api.NetworkViewState
 import com.raed.yahoofinance.data.repo.GetSummaryRepoImpl
-import com.raed.yahoofinance.domain.repo.ISummaryRepo
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject

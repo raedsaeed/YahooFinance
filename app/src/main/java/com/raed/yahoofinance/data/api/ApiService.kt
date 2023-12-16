@@ -1,6 +1,7 @@
-package com.raed.yahoofinance.data
+package com.raed.yahoofinance.data.api
 
 import com.raed.yahoofinance.data.model.YahooFinanceResponse
+import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -9,5 +10,5 @@ import retrofit2.http.Query
  */
 interface ApiService {
     @GET("market/v2/get-summary")
-    suspend fun getSummary(@Query("region") region : String): YahooFinanceResponse
+    suspend fun getSummary(@Query("region") region : String): Response<YahooFinanceResponse>
 }

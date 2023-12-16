@@ -1,9 +1,9 @@
 package com.raed.yahoofinance.ui
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.raed.yahoofinance.data.model.NetworkViewState
+import com.raed.yahoofinance.data.api.NetworkViewState
+import com.raed.yahoofinance.data.api.RemoteExceptions
 import com.raed.yahoofinance.data.model.Quote
 import com.raed.yahoofinance.domain.usecase.GetSummaryUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,9 +25,6 @@ class SummaryViewModel @Inject constructor(private val getSummaryUseCase: GetSum
         MutableStateFlow(UiState(isLoading = true))
     val uiState: StateFlow<UiState> = _uiState
 
-    fun testViewModel() {
-        Log.e("TAG", "testViewModel: ", )
-    }
     fun getSummary() {
         viewModelScope.launch {
             getSummaryUseCase.invoke().collect { networkState ->
@@ -42,7 +39,7 @@ class SummaryViewModel @Inject constructor(private val getSummaryUseCase: GetSum
                         _uiState.update {
                             it.copy(
                                 isLoading = false,
-                                error = networkState.error?.message
+                                error = validateErrors(networkState.error)
                             )
                         }
                     }
@@ -58,6 +55,15 @@ class SummaryViewModel @Inject constructor(private val getSummaryUseCase: GetSum
                     }
                 }
             }
+        }
+    }
+
+    private fun validateErrors(exception: Throwable?): String {
+        return when (exception) {
+            is RemoteExceptions.UnauthorizedException -> "Unauthorized Request, Please use a valid API Key"
+            is RemoteExceptions.NotFoundException -> "API not found"
+            is RemoteExceptions.ServerErrorException -> "Server Error"
+            else -> "Unknown Error, Please try again"
         }
     }
 

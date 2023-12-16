@@ -11,6 +11,6 @@ import javax.inject.Inject
 class GetSummaryRepoImpl @Inject constructor(private val summaryDataSource: SummaryDataSource) :
     ISummaryRepo {
     override suspend fun getSummary(): List<Quote> {
-        return summaryDataSource.getSummary().quotes
+        return summaryDataSource.getSummary()?.quotes ?: emptyList()
     }
 }

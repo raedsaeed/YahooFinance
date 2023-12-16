@@ -1,6 +1,7 @@
 package com.raed.yahoofinance.data.datasource
 
-import com.raed.yahoofinance.data.ApiService
+import com.raed.yahoofinance.data.api.ApiService
+import com.raed.yahoofinance.data.api.invokeApi
 import com.raed.yahoofinance.data.model.YahooFinanceResponse
 import javax.inject.Inject
 
@@ -10,7 +11,7 @@ import javax.inject.Inject
 
 
 class SummaryDataSource @Inject constructor(private val apiService: ApiService) {
-    suspend fun getSummary(): YahooFinanceResponse {
-        return apiService.getSummary("US")
+    suspend fun getSummary(): YahooFinanceResponse? {
+        return invokeApi { apiService.getSummary("US") }
     }
 }
