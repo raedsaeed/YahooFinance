@@ -1,6 +1,6 @@
-package com.raed.yahoofinance.data.network
+package com.raed.yahoofinance.data
 
-import com.raed.yahoofinance.data.YahooFinanceResponse
+import com.raed.yahoofinance.data.model.YahooFinanceResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 

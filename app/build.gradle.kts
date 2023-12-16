@@ -66,6 +66,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")
     implementation("androidx.lifecycle:lifecycle-process:$lifecycleVersion")
     kapt("androidx.lifecycle:lifecycle-compiler:$lifecycleVersion")
+    implementation("androidx.activity:activity-ktx:1.6.1")
 
     // Coroutine
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")

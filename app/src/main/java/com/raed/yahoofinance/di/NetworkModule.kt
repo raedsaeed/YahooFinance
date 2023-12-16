@@ -3,7 +3,7 @@ package com.raed.yahoofinance.di
 import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import com.raed.yahoofinance.data.network.ApiService
+import com.raed.yahoofinance.data.ApiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

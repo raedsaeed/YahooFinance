@@ -1,4 +1,4 @@
-package com.raed.yahoofinance.data
+package com.raed.yahoofinance.data.model
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
