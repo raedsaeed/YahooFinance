@@ -11,7 +11,8 @@ import com.raed.yahoofinance.databinding.ItemQuoteBinding
 /**
  * Created by Raed Saeed on 12/16/2023
  */
-class QuoteAdapter : ListAdapter<Quote, QuoteAdapter.QuoteViewHolder>(QuoteDiffCallback) {
+class QuoteAdapter(val onQuoteClick: (quote: Quote) -> Unit) :
+    ListAdapter<Quote, QuoteAdapter.QuoteViewHolder>(QuoteDiffCallback) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QuoteViewHolder {
         val binding = ItemQuoteBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return QuoteViewHolder(binding)
@@ -26,6 +27,10 @@ class QuoteAdapter : ListAdapter<Quote, QuoteAdapter.QuoteViewHolder>(QuoteDiffC
     inner class QuoteViewHolder(private val itemQuoteBinding: ItemQuoteBinding) :
         RecyclerView.ViewHolder(itemQuoteBinding.root) {
         fun bind(quote: Quote) {
+            itemQuoteBinding.clItemQuote.setOnClickListener {
+                onQuoteClick(quote)
+            }
+
             itemQuoteBinding.ivItemQuoteTitle.text = quote.symbol
             itemQuoteBinding.ivItemQuoteEx.text = quote.exchange
             itemQuoteBinding.ivItemQuoteShortname.text = quote.shortName

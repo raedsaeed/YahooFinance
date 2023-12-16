@@ -8,5 +8,7 @@ import com.raed.yahoofinance.data.model.Quote
 data class UiState(
     val isLoading: Boolean,
     val error: String? = null,
-    val dataSet: List<Quote>? = null
+    val dataSet: List<Quote>? = null,
+    val quotes : List<Quote>? = null,
+    val filteredString : CharSequence? = null,
 )

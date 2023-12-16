@@ -1,5 +1,6 @@
 package com.raed.yahoofinance.ui
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -10,17 +11,24 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
-import com.raed.yahoofinance.data.model.Quote
 import com.raed.yahoofinance.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+
+/**
+ * Created by Raed Saeed on 12/16/2023
+ */
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private val viewModel: SummaryViewModel by viewModels()
     private lateinit var binding: ActivityMainBinding
-    private var quotes: List<Quote>? = null
-    private val quoteAdapter = QuoteAdapter()
+    private var timeInterval = 30 * 1000L
+    private val quoteAdapter = QuoteAdapter {
+        val intent = Intent(this@MainActivity, DetailsActivity::class.java)
+        intent.putExtra(DetailsActivity.DETAILS_PAYLOAD, it)
+        startActivity(intent)
+    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,16 +42,7 @@ class MainActivity : AppCompatActivity() {
 
 
         binding.svActivityMainSearch.doOnTextChanged { text, _, _, _ ->
-            if (!text.isNullOrEmpty()) {
-                val newList = quotes?.filter {
-                    it.shortName.toString().contains(text.toString(), true) ||
-                            it.fullExchangeName.toString().contains(text.toString(), true) ||
-                            it.symbol.toString().contains(text.toString(), true)
-                }
-                quoteAdapter.submitList(newList)
-            } else {
-                quoteAdapter.submitList(quotes)
-            }
+            viewModel.search(text)
         }
 
         lifecycleScope.launch {
@@ -53,17 +52,26 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+
+//        lifecycleScope.launch {
+//            repeatOnLifecycle(Lifecycle.State.STARTED) {
+//                while (true) {
+//                    viewModel.getSummary()
+//                    delay(timeInterval)
+//                }
+//            }
+//        }
+
         viewModel.getSummary()
     }
 
     private fun populateUI(uiState: UiState) {
-        binding.pbActivityMainLoading.isVisible = uiState.isLoading
+        binding.pbActivityMainLoading.isVisible = uiState.isLoading && quoteAdapter.itemCount == 0
 
         if (uiState.error != null) {
             Snackbar.make(binding.root, uiState.error, Snackbar.LENGTH_LONG).show()
         }
 
-        this.quotes = uiState.dataSet
-        quoteAdapter.submitList(quotes)
+        quoteAdapter.submitList(uiState.quotes)
     }
 }

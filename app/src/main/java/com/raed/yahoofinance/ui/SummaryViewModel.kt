@@ -52,6 +52,7 @@ class SummaryViewModel @Inject constructor(private val getSummaryUseCase: GetSum
                                 dataSet = networkState.data as? List<Quote>
                             )
                         }
+                        search(_uiState.value.filteredString)
                     }
                 }
             }
@@ -67,11 +68,26 @@ class SummaryViewModel @Inject constructor(private val getSummaryUseCase: GetSum
         }
     }
 
-    fun consumeAction() {
-        _uiState.update {
-            it.copy(
-                error = null
-            )
+    fun search(text: CharSequence?) {
+        if (!text.isNullOrEmpty()) {
+            val newList = _uiState.value.dataSet?.filter {
+                it.shortName.toString().contains(text.toString(), true) ||
+                        it.fullExchangeName.toString().contains(text.toString(), true) ||
+                        it.symbol.toString().contains(text.toString(), true)
+            }
+            _uiState.update {
+                it.copy(
+                    quotes = newList,
+                    filteredString = text
+                )
+            }
+        } else {
+            _uiState.update {
+                it.copy(
+                    quotes = it.dataSet,
+                    filteredString = null
+                )
+            }
         }
     }
 }
