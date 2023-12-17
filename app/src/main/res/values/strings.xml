@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">YahooFinance</string>
     <string name="search">Search</string>
+    <string name="error_label_message_unauthorized">Unauthorized Request, Please use a valid API Key</string>
+    <string name="error_label_message_not_found">API not found</string>
+    <string name="error_label_message_server_error">Server Error</string>
+    <string name="error_labe_message_unknown_error">Unknown Error, Please try again</string>
 </resources>

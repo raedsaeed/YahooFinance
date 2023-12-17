@@ -2,6 +2,7 @@ package com.raed.yahoofinance.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.raed.yahoofinance.R
 import com.raed.yahoofinance.data.api.NetworkViewState
 import com.raed.yahoofinance.data.api.RemoteExceptions
 import com.raed.yahoofinance.data.model.Quote
@@ -25,6 +26,7 @@ class SummaryViewModel @Inject constructor(private val getSummaryUseCase: GetSum
         MutableStateFlow(UiState(isLoading = true))
     val uiState: StateFlow<UiState> = _uiState
 
+    @Suppress("UNCHECKED_CAST")
     fun getSummary() {
         viewModelScope.launch {
             getSummaryUseCase.invoke().collect { networkState ->
@@ -59,12 +61,12 @@ class SummaryViewModel @Inject constructor(private val getSummaryUseCase: GetSum
         }
     }
 
-    private fun validateErrors(exception: Throwable?): String {
+    private fun validateErrors(exception: Throwable?): Int {
         return when (exception) {
-            is RemoteExceptions.UnauthorizedException -> "Unauthorized Request, Please use a valid API Key"
-            is RemoteExceptions.NotFoundException -> "API not found"
-            is RemoteExceptions.ServerErrorException -> "Server Error"
-            else -> "Unknown Error, Please try again"
+            is RemoteExceptions.UnauthorizedException -> R.string.error_label_message_unauthorized
+            is RemoteExceptions.NotFoundException -> R.string.error_label_message_not_found
+            is RemoteExceptions.ServerErrorException -> R.string.error_label_message_server_error
+            else -> R.string.error_labe_message_unknown_error
         }
     }
 

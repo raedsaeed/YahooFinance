@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.raed.yahoofinance.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 /**
@@ -23,7 +24,7 @@ import kotlinx.coroutines.launch
 class MainActivity : AppCompatActivity() {
     private val viewModel: SummaryViewModel by viewModels()
     private lateinit var binding: ActivityMainBinding
-    private var timeInterval = 30 * 1000L
+    private var timeInterval = 8 * 1000L
     private val quoteAdapter = QuoteAdapter {
         val intent = Intent(this@MainActivity, DetailsActivity::class.java)
         intent.putExtra(DetailsActivity.DETAILS_PAYLOAD, it)
@@ -53,23 +54,21 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-//        lifecycleScope.launch {
-//            repeatOnLifecycle(Lifecycle.State.STARTED) {
-//                while (true) {
-//                    viewModel.getSummary()
-//                    delay(timeInterval)
-//                }
-//            }
-//        }
-
-        viewModel.getSummary()
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                while (true) {
+                    viewModel.getSummary()
+                    delay(timeInterval)
+                }
+            }
+        }
     }
 
     private fun populateUI(uiState: UiState) {
         binding.pbActivityMainLoading.isVisible = uiState.isLoading && quoteAdapter.itemCount == 0
 
         if (uiState.error != null) {
-            Snackbar.make(binding.root, uiState.error, Snackbar.LENGTH_LONG).show()
+            Snackbar.make(binding.root, getString(uiState.error), Snackbar.LENGTH_INDEFINITE).show()
         }
 
         quoteAdapter.submitList(uiState.quotes)

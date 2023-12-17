@@ -1,6 +1,5 @@
 package com.raed.yahoofinance.domain.usecase
 
-import android.util.Log
 import com.raed.yahoofinance.data.api.NetworkViewState
 import com.raed.yahoofinance.data.repo.GetSummaryRepoImpl
 import kotlinx.coroutines.flow.catch
@@ -14,7 +13,6 @@ class GetSummaryUseCase @Inject constructor(private val repo: GetSummaryRepoImpl
     operator fun invoke() = flow {
         emit(NetworkViewState.Loading)
         val response = repo.getSummary()
-        Log.e("TAG", "invoke: got data")
         emit(NetworkViewState.Success(response))
     }.catch { e ->
         e.printStackTrace()
